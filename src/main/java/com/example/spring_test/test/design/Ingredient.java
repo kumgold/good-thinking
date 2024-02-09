@@ -1,4 +1,4 @@
-package com.example.spring_test.test;
+package com.example.spring_test.test.design;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
