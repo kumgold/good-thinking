@@ -1,2 +1,2 @@
-# spring_test
-Spring test
+# Spring Test
+Spring study project
