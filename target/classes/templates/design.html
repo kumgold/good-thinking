@@ -49,7 +49,7 @@
 
                 <div class="ingredient-group" id="sauces">
                     <h3>Pick your sauce:</h3>
-                    <div th:each="ingredient : ${protein}">
+                    <div th:each="ingredient : ${sauce}">
                         <input name="ingredients" type="checkbox" th:value="${ingredient.id}"/>
                         <span th:text="${ingredient.name}">Ingredient</span>
                     </div>
