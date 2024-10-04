@@ -1,4 +1,4 @@
-package com.goldcompany.test.hellospring;
+package com.goldcompany.test.hellospring.payment;
 
 import java.io.IOException;
 import java.math.BigDecimal;

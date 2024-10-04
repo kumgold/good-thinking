@@ -1,10 +1,12 @@
-package com.goldcompany.test.hellospring;
+package com.goldcompany.test.hellospring.exchangerate;
+
+import com.goldcompany.test.hellospring.payment.ExchangeRateProvider;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class CachedExchangeRateProvider implements ExchangeRateProvider{
+public class CachedExchangeRateProvider implements ExchangeRateProvider {
     private final ExchangeRateProvider provider;
 
     private BigDecimal cachedExchangeRate;

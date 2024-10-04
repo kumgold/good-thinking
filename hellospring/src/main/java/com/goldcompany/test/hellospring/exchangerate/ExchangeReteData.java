@@ -1,4 +1,4 @@
-package com.goldcompany.test.hellospring;
+package com.goldcompany.test.hellospring.exchangerate;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

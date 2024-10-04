@@ -1,6 +1,7 @@
-package com.goldcompany.test.hellospring;
+package com.goldcompany.test.hellospring.exchangerate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.goldcompany.test.hellospring.payment.ExchangeRateProvider;
 
 import java.io.BufferedReader;
 import java.io.IOException;

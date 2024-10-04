@@ -1,5 +1,7 @@
 package com.goldcompany.test.hellospring;
 
+import com.goldcompany.test.hellospring.payment.Payment;
+import com.goldcompany.test.hellospring.payment.PaymentService;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 

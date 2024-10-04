@@ -1,5 +1,9 @@
 package com.goldcompany.test.hellospring;
 
+import com.goldcompany.test.hellospring.exchangerate.CachedExchangeRateProvider;
+import com.goldcompany.test.hellospring.payment.ExchangeRateProvider;
+import com.goldcompany.test.hellospring.exchangerate.WebApiExchangeRateProvider;
+import com.goldcompany.test.hellospring.payment.PaymentService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
