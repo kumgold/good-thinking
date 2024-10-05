@@ -9,7 +9,7 @@ import java.util.List;
 
 public class SortTest {
     Sort sort;
- 
+
     @BeforeEach
     void beforeEach() {
         sort = new Sort();
