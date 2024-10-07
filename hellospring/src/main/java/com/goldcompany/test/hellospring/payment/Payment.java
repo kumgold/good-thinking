@@ -1,6 +1,7 @@
 package com.goldcompany.test.hellospring.payment;
 
 import java.math.BigDecimal;
+import java.time.Clock;
 import java.time.LocalDateTime;
 
 public class Payment {
@@ -18,6 +19,19 @@ public class Payment {
         this.exchangedRate = exchangedRate;
         this.convertedAmount = convertedAmount;
         this.validUntil = validUntil;
+    }
+
+    public static Payment create(
+            Long orderId,
+            String currency,
+            BigDecimal foreignCurrencyAmount,
+            BigDecimal exchangeRate,
+            LocalDateTime now
+    ) {
+        BigDecimal convertedAmount = foreignCurrencyAmount.multiply(exchangeRate);
+        LocalDateTime validUntil = now.plusMinutes(30);
+
+        return new Payment(orderId, currency, foreignCurrencyAmount, exchangeRate, convertedAmount, validUntil);
     }
 
     public Long getOrderId() {
@@ -42,6 +56,10 @@ public class Payment {
 
     public LocalDateTime getValidUntil() {
         return validUntil;
+    }
+
+    public boolean isValid(Clock clock) {
+        return LocalDateTime.now(clock).isBefore(this.validUntil);
     }
 
     @Override
