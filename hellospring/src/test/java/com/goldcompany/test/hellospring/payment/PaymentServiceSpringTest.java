@@ -1,6 +1,6 @@
 package com.goldcompany.test.hellospring.payment;
 
-import com.goldcompany.test.hellospring.TestObjectFactory;
+import com.goldcompany.test.hellospring.TestPaymentConfig;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,15 +10,18 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.Clock;
+import java.time.LocalDateTime;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = TestObjectFactory.class)
+@ContextConfiguration(classes = TestPaymentConfig.class)
 class PaymentServiceSpringTest {
     @Autowired PaymentService paymentService;
     @Autowired ExchangeRateProviderStub exchangeRateProviderStub;
+    @Autowired Clock clock;
 
     @Test
-    void prepare() throws IOException {
+    void convertedAmount() throws IOException {
         // exchange rate = 1000
         Payment payment = paymentService.prepare(1L, "USD", BigDecimal.TEN);
 
@@ -32,4 +35,15 @@ class PaymentServiceSpringTest {
         Assertions.assertThat(payment2.getExchangedRate()).isEqualByComparingTo(BigDecimal.valueOf(1_321));
         Assertions.assertThat(payment2.getConvertedAmount()).isEqualByComparingTo(BigDecimal.valueOf(13_210));
     }
+
+    @Test
+    void validUntil() throws IOException {
+        Payment payment = paymentService.prepare(1L, "USD", BigDecimal.TEN);
+
+        LocalDateTime now = LocalDateTime.now(this.clock);
+        LocalDateTime expectedValidUntil = now.plusMinutes(30);
+
+        Assertions.assertThat(payment.getValidUntil()).isEqualTo(expectedValidUntil);
+    }
+
 }

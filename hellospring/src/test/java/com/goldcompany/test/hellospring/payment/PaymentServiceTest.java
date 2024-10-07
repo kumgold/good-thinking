@@ -1,30 +1,45 @@
 package com.goldcompany.test.hellospring.payment;
 
-import com.goldcompany.test.hellospring.exchangerate.WebApiExchangeRateProvider;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDateTime;
-
-import static org.junit.jupiter.api.Assertions.*;
+import java.time.ZoneId;
 
 class PaymentServiceTest {
+    Clock clock;
 
-    @Test
-    void prepare() throws IOException {
-        getPayment(BigDecimal.valueOf(1314), BigDecimal.valueOf(1_3140));
-        getPayment(BigDecimal.valueOf(1340), BigDecimal.valueOf(1_3400));
-        getPayment(BigDecimal.valueOf(1321), BigDecimal.valueOf(1_3210));
-
-        // 원화환산금액 유효시간 계산
-//        Assertions.assertThat(payment.getValidUntil()).isAfter(LocalDateTime.now());
-//        Assertions.assertThat(payment.getValidUntil()).isBefore(LocalDateTime.now().plusMinutes(30));
+    @BeforeEach
+    void beforeEach() {
+        clock = Clock.fixed(Instant.now(), ZoneId.systemDefault());
     }
 
-    private static void getPayment(BigDecimal exchangeRate, BigDecimal convertedAmount) throws IOException {
-        PaymentService paymentService = new PaymentService(new ExchangeRateProviderStub(exchangeRate));
+    @Test
+    void convertedAmount() throws IOException {
+        getPayment(BigDecimal.valueOf(1314), BigDecimal.valueOf(1_3140), this.clock);
+        getPayment(BigDecimal.valueOf(1340), BigDecimal.valueOf(1_3400), this.clock);
+        getPayment(BigDecimal.valueOf(1321), BigDecimal.valueOf(1_3210), this.clock);
+    }
+
+    @Test
+    void validUntil() throws IOException {
+        PaymentService paymentService = new PaymentService(new ExchangeRateProviderStub(BigDecimal.valueOf(1_000)), clock);
+
+        Payment payment = paymentService.prepare(1L, "USD", BigDecimal.TEN);
+
+        LocalDateTime now = LocalDateTime.now(clock);
+        LocalDateTime expectedValidUntil = now.plusMinutes(30);
+
+        Assertions.assertThat(payment.getValidUntil()).isEqualTo(expectedValidUntil);
+    }
+
+    private static void getPayment(BigDecimal exchangeRate, BigDecimal convertedAmount, Clock clock) throws IOException {
+        PaymentService paymentService = new PaymentService(new ExchangeRateProviderStub(exchangeRate), clock);
 
         Payment payment = paymentService.prepare(1L, "USD", BigDecimal.TEN);
 
