@@ -17,7 +17,7 @@ public class CachedExchangeRateProvider implements ExchangeRateProvider {
     }
 
     @Override
-    public BigDecimal getExchangeRate(String currency) throws IOException {
+    public BigDecimal getExchangeRate(String currency) {
         if (cachedExchangeRate == null || cacheExpiryTime.isBefore(LocalDateTime.now())) {
             cachedExchangeRate = this.provider.getExchangeRate(currency);
             cacheExpiryTime = LocalDateTime.now().plusSeconds(3);

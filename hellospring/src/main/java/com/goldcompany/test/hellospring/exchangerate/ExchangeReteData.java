@@ -9,5 +9,4 @@ import java.util.Map;
 public record ExchangeReteData(
         String result,
         Map<String, BigDecimal> rates
-) {
-}
+) {}

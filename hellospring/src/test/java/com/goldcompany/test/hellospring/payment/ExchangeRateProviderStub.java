@@ -1,6 +1,5 @@
 package com.goldcompany.test.hellospring.payment;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 
 public class ExchangeRateProviderStub implements ExchangeRateProvider {
@@ -19,7 +18,7 @@ public class ExchangeRateProviderStub implements ExchangeRateProvider {
     }
 
     @Override
-    public BigDecimal getExchangeRate(String currency) throws IOException {
+    public BigDecimal getExchangeRate(String currency) {
         return exchangeRate;
     }
 }
