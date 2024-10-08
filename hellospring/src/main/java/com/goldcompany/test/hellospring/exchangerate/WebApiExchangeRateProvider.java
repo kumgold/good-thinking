@@ -18,6 +18,10 @@ public class WebApiExchangeRateProvider implements ExchangeRateProvider {
     @Override
     public BigDecimal getExchangeRate(String currency) {
         String url = "https://open.er-api.com/v6/latest/" + currency;
+        return runApiForExchangeRate(url);
+    }
+
+    private static BigDecimal runApiForExchangeRate(String url) {
         URI uri;
 
         try {
