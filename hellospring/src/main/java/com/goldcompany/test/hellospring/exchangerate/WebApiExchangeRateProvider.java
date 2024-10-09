@@ -3,6 +3,8 @@ package com.goldcompany.test.hellospring.exchangerate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.goldcompany.test.hellospring.api.ApiExecutor;
+import com.goldcompany.test.hellospring.api.ErApiExchangeRateExtractor;
+import com.goldcompany.test.hellospring.api.ExchangeRateExtractor;
 import com.goldcompany.test.hellospring.api.SImpleApiExecutor;
 import com.goldcompany.test.hellospring.payment.ExchangeRateProvider;
 
@@ -15,10 +17,10 @@ public class WebApiExchangeRateProvider implements ExchangeRateProvider {
     @Override
     public BigDecimal getExchangeRate(String currency) {
         String url = "https://open.er-api.com/v6/latest/" + currency;
-        return runApiForExchangeRate(url, new SImpleApiExecutor());
+        return runApiForExchangeRate(url, new SImpleApiExecutor(), new ErApiExchangeRateExtractor());
     }
 
-    private static BigDecimal runApiForExchangeRate(String url, ApiExecutor apiExecutor) {
+    private static BigDecimal runApiForExchangeRate(String url, ApiExecutor apiExecutor, ExchangeRateExtractor exchangeRateExtractor) {
         URI uri;
 
         try {
@@ -35,15 +37,9 @@ public class WebApiExchangeRateProvider implements ExchangeRateProvider {
         }
 
         try {
-            return parseExchangeRate(response);
+            return exchangeRateExtractor.extract(response);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private static BigDecimal parseExchangeRate(String response) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        ExchangeReteData data = mapper.readValue(response, ExchangeReteData.class);
-        return data.rates().get("KRW");
     }
 }
