@@ -1,5 +1,6 @@
 package com.goldcompany.test.hellospring;
 
+import com.goldcompany.test.hellospring.api.ApiTemplate;
 import com.goldcompany.test.hellospring.payment.ExchangeRateProvider;
 import com.goldcompany.test.hellospring.exchangerate.WebApiExchangeRateProvider;
 import com.goldcompany.test.hellospring.payment.PaymentService;
@@ -17,7 +18,12 @@ public class PaymentConfig {
 
     @Bean
     public ExchangeRateProvider exchangeRateProvider() {
-        return new WebApiExchangeRateProvider();
+        return new WebApiExchangeRateProvider(apiTemplate());
+    }
+
+    @Bean
+    public ApiTemplate apiTemplate() {
+        return new ApiTemplate();
     }
 
     @Bean

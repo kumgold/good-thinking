@@ -12,12 +12,16 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class WebApiExchangeRateProvider implements ExchangeRateProvider {
-    ApiTemplate apiTemplate = new ApiTemplate();
+    private final ApiTemplate apiTemplate;
+
+    public WebApiExchangeRateProvider(ApiTemplate apiTemplate) {
+        this.apiTemplate = apiTemplate;
+    }
 
     @Override
     public BigDecimal getExchangeRate(String currency) {
         String url = "https://open.er-api.com/v6/latest/" + currency;
 
-        return apiTemplate.getExchangeRate(url, new HttpClientApiExecutor(), new ErApiExchangeRateExtractor());
+        return apiTemplate.getExchangeRate(url);
     }
 }
