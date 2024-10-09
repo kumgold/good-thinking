@@ -1,11 +1,11 @@
 package com.goldcompany.test.hellospring;
 
-import com.goldcompany.test.hellospring.api.ApiTemplate;
+import com.goldcompany.test.hellospring.exchangerate.RestTemplateExchangeRateProvider;
 import com.goldcompany.test.hellospring.payment.ExchangeRateProvider;
-import com.goldcompany.test.hellospring.exchangerate.WebApiExchangeRateProvider;
 import com.goldcompany.test.hellospring.payment.PaymentService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.Clock;
 
@@ -18,12 +18,12 @@ public class PaymentConfig {
 
     @Bean
     public ExchangeRateProvider exchangeRateProvider() {
-        return new WebApiExchangeRateProvider(apiTemplate());
+        return new RestTemplateExchangeRateProvider(restTemplate());
     }
 
     @Bean
-    public ApiTemplate apiTemplate() {
-        return new ApiTemplate();
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 
     @Bean
