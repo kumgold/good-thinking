@@ -3,6 +3,8 @@ package com.goldcompany.test.hellospring;
 import com.goldcompany.test.hellospring.data.JdbcOrderRepository;
 import com.goldcompany.test.hellospring.order.OrderRepository;
 import com.goldcompany.test.hellospring.order.OrderService;
+import com.goldcompany.test.hellospring.order.OrderServiceImpl;
+import com.goldcompany.test.hellospring.order.OrderServiceTxProxy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -18,7 +20,10 @@ public class OrderConfig {
             JdbcTransactionManager transactionManager,
             OrderRepository orderRepository
     ) {
-        return new OrderService(orderRepository, transactionManager);
+        return new OrderServiceTxProxy(
+                new OrderServiceImpl(orderRepository),
+                transactionManager
+        );
     }
 
     @Bean

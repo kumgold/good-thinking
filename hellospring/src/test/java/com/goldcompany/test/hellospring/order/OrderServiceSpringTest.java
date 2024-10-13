@@ -1,7 +1,6 @@
 package com.goldcompany.test.hellospring.order;
 
 import com.goldcompany.test.hellospring.OrderConfig;
-import com.goldcompany.test.hellospring.TestPaymentConfig;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -2,6 +2,7 @@ package com.goldcompany.test.hellospring;
 
 import com.goldcompany.test.hellospring.order.Order;
 import com.goldcompany.test.hellospring.order.OrderService;
+import com.goldcompany.test.hellospring.order.OrderServiceImpl;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.orm.jpa.JpaTransactionManager;
