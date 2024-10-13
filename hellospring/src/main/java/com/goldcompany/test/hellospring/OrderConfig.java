@@ -1,6 +1,7 @@
 package com.goldcompany.test.hellospring;
 
-import com.goldcompany.test.hellospring.data.OrderRepository;
+import com.goldcompany.test.hellospring.data.JpaOrderRepository;
+import com.goldcompany.test.hellospring.order.OrderRepository;
 import com.goldcompany.test.hellospring.order.OrderService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,6 @@ public class OrderConfig {
 
     @Bean
     public OrderRepository orderRepository() {
-        return new OrderRepository();
+        return new JpaOrderRepository();
     }
 }

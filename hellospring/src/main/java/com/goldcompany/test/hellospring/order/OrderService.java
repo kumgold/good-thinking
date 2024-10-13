@@ -1,6 +1,6 @@
 package com.goldcompany.test.hellospring.order;
 
-import com.goldcompany.test.hellospring.data.OrderRepository;
+import com.goldcompany.test.hellospring.data.JpaOrderRepository;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;

@@ -5,7 +5,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence/orm
           https://jakarta.ee/xml/ns/persistence/orm/orm_3_1.xsd">
-    <entity class="tobyspring.hellospring.order.Order" name="Order" access="FIELD">
+    <entity class="com.goldcompany.test.hellospring.order.Order" name="Order" access="FIELD">
         <table name="orders"/>
         <attributes>
             <id name="id">
