@@ -4,3 +4,4 @@ build/resources/main/application.yml
 .idea/spring-test.iml
 build/resources/main/application.yml
 out/production/resources/application.yml
+local.properties
