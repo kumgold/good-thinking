@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.goldcompany.apps.goodthinking.NavDestinations
 
 @Composable
 fun HomeScreen(
@@ -26,9 +27,14 @@ fun HomeScreen(
         verticalArrangement = Arrangement.Center
     ) {
         MainButton(text = "오늘의 명언") {
-            navController.navigate("good_word")
+            navController.navigate(NavDestinations.GOOD_WORD)
         }
-        MainButton(text = "좋은 생각 카드") { }
+        MainButton(text = "좋은 생각 카드") {
+            navController.navigate(NavDestinations.CARD)
+        }
+        MainButton(text = "카드 편집") {
+
+        }
     }
 }
 
