@@ -1,7 +1,7 @@
 package com.goldcompany.apps.goodthinking.card
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -16,17 +16,16 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CardScreen(
     navController: NavController,
-    viewModel: CardViewModel = viewModel()
+    viewModel: CardViewModel = hiltViewModel()
 ) {
     Scaffold(
         topBar = {
@@ -55,15 +54,21 @@ fun CardScreen(
             contentPadding = PaddingValues(8.dp),
         ) {
             items(15) {
-                GoodWordCard()
+                GoodWordCard(
+                    onClick = { viewModel.getThinkingCard() }
+                )
             }
         }
     }
 }
 
 @Composable
-private fun GoodWordCard() {
+private fun GoodWordCard(
+    onClick: () -> Unit
+) {
     Card(
-        modifier = Modifier.size(width = 90.dp, height = 160.dp)
+        modifier = Modifier
+            .size(width = 90.dp, height = 160.dp)
+            .clickable { onClick() }
     ) {}
 }

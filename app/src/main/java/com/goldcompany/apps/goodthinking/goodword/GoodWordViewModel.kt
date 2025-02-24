@@ -4,15 +4,21 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.goldcompany.apps.goodthinking.BuildConfig
 import com.goldcompany.apps.goodthinking.UiState
+import com.goldcompany.apps.goodthinking.data.repo.DefaultRepository
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class GoodWordViewModel : ViewModel() {
+@HiltViewModel
+class GoodWordViewModel @Inject constructor(
+    private val repository: DefaultRepository
+) : ViewModel() {
     private val _uiState: MutableStateFlow<UiState> =
         MutableStateFlow(UiState.Initial)
     val uiState: StateFlow<UiState> =
@@ -34,7 +40,7 @@ class GoodWordViewModel : ViewModel() {
             try {
                 val response = generativeModel.generateContent(
                     content {
-                        text("오늘의 명언 하나만 보여줘 명언을 남긴 사람은 개행해서 보여줘")
+                        text("오늘의 명언 하나만 보여줘")
                     }
                 )
                 response.text?.let { outputContent ->
@@ -42,6 +48,15 @@ class GoodWordViewModel : ViewModel() {
                 }
             } catch (e: Exception) {
                 _uiState.value = UiState.Error(e.localizedMessage ?: "")
+            }
+        }
+    }
+
+    fun saveGoodThinking() {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (_uiState.value is UiState.Success) {
+                val word = (_uiState.value as UiState.Success).outputText
+                repository.insertGoodThinking(word)
             }
         }
     }

@@ -10,6 +10,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -29,7 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.goldcompany.apps.goodthinking.UiState
 import kotlinx.coroutines.delay
@@ -38,12 +39,13 @@ import kotlinx.coroutines.delay
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GoodWordScreen(
-    goodWordViewModel: GoodWordViewModel = viewModel(),
+    viewModel: GoodWordViewModel = hiltViewModel(),
     navController: NavController
 ) {
     var isVisible by rememberSaveable { mutableStateOf(false) }
+    var isSaved by rememberSaveable { mutableStateOf(false) }
     var result by rememberSaveable { mutableStateOf("") }
-    val uiState by goodWordViewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()
 
     LaunchedEffect(isVisible) {
@@ -71,6 +73,20 @@ fun GoodWordScreen(
                             Icon(
                                 Icons.AutoMirrored.Filled.ArrowBack,
                                 contentDescription = "back"
+                            )
+                        }
+                    },
+                    actions = {
+                        IconButton(
+                            onClick = {
+                                viewModel.saveGoodThinking()
+                                isSaved = true
+                            },
+                            enabled = !isSaved
+                        ) {
+                            Icon(
+                                Icons.Default.AddCircle,
+                                contentDescription = "add"
                             )
                         }
                     }

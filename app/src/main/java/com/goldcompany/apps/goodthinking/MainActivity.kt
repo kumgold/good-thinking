@@ -10,7 +10,9 @@ import androidx.compose.ui.Modifier
 import com.goldcompany.apps.goodthinking.goodword.GoodWordScreen
 import com.goldcompany.apps.goodthinking.home.HomeScreen
 import com.goldcompany.apps.goodthinking.ui.theme.GoodThinkingTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
