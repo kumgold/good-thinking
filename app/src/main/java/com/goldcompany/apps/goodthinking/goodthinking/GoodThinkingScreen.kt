@@ -1,4 +1,4 @@
-package com.goldcompany.apps.goodthinking.goodword
+package com.goldcompany.apps.goodthinking.goodthinking
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -38,8 +38,8 @@ import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GoodWordScreen(
-    viewModel: GoodWordViewModel = hiltViewModel(),
+fun GoodThinkingScreen(
+    viewModel: GoodThinkingViewModel = hiltViewModel(),
     navController: NavController
 ) {
     var isVisible by rememberSaveable { mutableStateOf(false) }
@@ -79,7 +79,7 @@ fun GoodWordScreen(
                     actions = {
                         IconButton(
                             onClick = {
-                                viewModel.saveGoodThinking()
+                                viewModel.insertGoodThinking()
                                 isSaved = true
                             },
                             enabled = !isSaved

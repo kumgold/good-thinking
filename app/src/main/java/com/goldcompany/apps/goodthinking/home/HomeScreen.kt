@@ -27,13 +27,13 @@ fun HomeScreen(
         verticalArrangement = Arrangement.Center
     ) {
         MainButton(text = "오늘의 명언") {
-            navController.navigate(NavDestinations.GOOD_WORD)
+            navController.navigate(NavDestinations.GOOD_THINKING)
         }
         MainButton(text = "좋은 생각 카드") {
             navController.navigate(NavDestinations.CARD)
         }
         MainButton(text = "카드 편집") {
-
+            navController.navigate(NavDestinations.EDIT_CARD)
         }
     }
 }

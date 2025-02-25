@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.goldcompany.apps.goodthinking.goodword.GoodWordScreen
-import com.goldcompany.apps.goodthinking.home.HomeScreen
 import com.goldcompany.apps.goodthinking.ui.theme.GoodThinkingTheme
 import dagger.hilt.android.AndroidEntryPoint
 

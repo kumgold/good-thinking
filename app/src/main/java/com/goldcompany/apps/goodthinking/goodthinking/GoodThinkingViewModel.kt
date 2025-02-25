@@ -1,4 +1,4 @@
-package com.goldcompany.apps.goodthinking.goodword
+package com.goldcompany.apps.goodthinking.goodthinking
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class GoodWordViewModel @Inject constructor(
+class GoodThinkingViewModel @Inject constructor(
     private val repository: DefaultRepository
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<UiState> =
@@ -52,7 +52,7 @@ class GoodWordViewModel @Inject constructor(
         }
     }
 
-    fun saveGoodThinking() {
+    fun insertGoodThinking() {
         viewModelScope.launch(Dispatchers.IO) {
             if (_uiState.value is UiState.Success) {
                 val word = (_uiState.value as UiState.Success).outputText
