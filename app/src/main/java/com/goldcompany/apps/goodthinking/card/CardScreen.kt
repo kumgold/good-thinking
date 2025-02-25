@@ -69,7 +69,7 @@ fun CardScreen(
             contentPadding = PaddingValues(8.dp),
         ) {
             items(15) {
-                GoodWordCard(
+                GoodThinkingCard(
                     onClick = {
                         viewModel.getThinkingCard()
                         isCardOpened.value = true
@@ -104,7 +104,7 @@ fun CardScreen(
 }
 
 @Composable
-private fun GoodWordCard(
+private fun GoodThinkingCard(
     onClick: () -> Unit
 ) {
     Card(

@@ -110,12 +110,12 @@ private fun CardItem(
     val isClicked = rememberSaveable { mutableStateOf(false) }
 
     if (!isClicked.value) {
-        GoodThinkingCard(
+        GoodThinkingItem(
             isClicked = isClicked,
             word = goodThinking.thinking
         )
     } else {
-        EditableGoodThinkingCard(
+        EditableGoodThinkingItem(
             isClicked = isClicked,
             goodThinking = goodThinking,
             editGoodThinking = { id, thinking ->
@@ -127,7 +127,7 @@ private fun CardItem(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun GoodThinkingCard(
+private fun GoodThinkingItem(
     isClicked: MutableState<Boolean>,
     word: String
 ) {
@@ -148,7 +148,7 @@ private fun GoodThinkingCard(
 }
 
 @Composable
-private fun EditableGoodThinkingCard(
+private fun EditableGoodThinkingItem(
     isClicked: MutableState<Boolean>,
     goodThinking: GoodThinking,
     editGoodThinking: (Long, String) -> Unit
