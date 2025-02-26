@@ -3,25 +3,29 @@ package com.goldcompany.apps.goodthinking.editcard
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -30,19 +34,43 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.goldcompany.apps.goodthinking.R
 import com.goldcompany.apps.goodthinking.data.db.GoodThinking
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun EditCardScreen(
     viewModel: EditCardViewModel = hiltViewModel(),
     navController: NavController
 ) {
-    val list by viewModel.thinkingList.collectAsStateWithLifecycle()
+    val thinkingList by viewModel.thinkingList.collectAsStateWithLifecycle()
+
+    EditCardScreen(
+        thinkingList = thinkingList,
+        popBackStack = { navController.popBackStack() },
+        updateGoodThinking = { data -> viewModel.updateGoodThinking(data.id, data.thinking) },
+        insertGoodThinking = { thinking -> viewModel.insertGoodThinking(thinking)},
+        deleteGoodThinking = { id -> viewModel.deleteGoodThinking(id) }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun EditCardScreen(
+    thinkingList: List<GoodThinking>,
+    popBackStack: () -> Unit = {},
+    updateGoodThinking: (GoodThinking) -> Unit = {},
+    insertGoodThinking: (String) -> Unit = {},
+    deleteGoodThinking: (Long) -> Unit = {}
+) {
+    val isOpenedDialog = rememberSaveable { mutableStateOf(false) }
 
     Scaffold (
         topBar = {
@@ -51,7 +79,7 @@ fun EditCardScreen(
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            navController.popBackStack()
+                            popBackStack()
                         }
                     ) {
                         Icon(
@@ -63,22 +91,12 @@ fun EditCardScreen(
                 actions = {
                     IconButton(
                         onClick = {
-
+                            isOpenedDialog.value = !isOpenedDialog.value
                         },
                     ) {
                         Icon(
                             Icons.Default.Add,
                             contentDescription = "add"
-                        )
-                    }
-                    IconButton(
-                        onClick = {
-
-                        },
-                    ) {
-                        Icon(
-                            Icons.Default.Delete,
-                            contentDescription = "delete"
                         )
                     }
                 }
@@ -90,13 +108,73 @@ fun EditCardScreen(
             contentPadding = PaddingValues(5.dp),
             verticalArrangement = Arrangement.spacedBy(5.dp),
         ) {
-            items(list) {
+            item {
+                if (thinkingList.isEmpty()) {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        text = stringResource(R.string.empty_edit_card)
+                    )
+                }
+            }
+
+            items(thinkingList) {
                 CardItem(
                     goodThinking = it,
-                    updateGoodThinking = { id, thinking ->
-                        viewModel.updateGoodThinking(id, thinking)
+                    updateGoodThinking = { data ->
+                        updateGoodThinking(data)
+                    },
+                    deleteGoodThinking = { id ->
+                        deleteGoodThinking(id)
                     }
                 )
+            }
+        }
+    }
+
+    if (isOpenedDialog.value) {
+        var word by rememberSaveable { mutableStateOf("") }
+
+        BasicAlertDialog(
+            modifier = Modifier.widthIn(300.dp, 350.dp).aspectRatio(ratio = 16/9f),
+            onDismissRequest = { isOpenedDialog.value = false },
+            properties = DialogProperties(
+                usePlatformDefaultWidth = false
+            ),
+        ) {
+            Card(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    OutlinedTextField(
+                        modifier = Modifier.fillMaxSize().padding(10.dp).weight(3f),
+                        value = word,
+                        onValueChange = {
+                            word = it
+                        }
+                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth().weight(1f),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        TextButton(
+                            onClick = {
+                                insertGoodThinking(word.trim())
+                                isOpenedDialog.value = !isOpenedDialog.value
+                            },
+                            enabled = word.isNotEmpty()
+                        ) {
+                            Text(stringResource(R.string.confirm))
+                        }
+                        TextButton(
+                            onClick = { isOpenedDialog.value = !isOpenedDialog.value }
+                        ) {
+                            Text(stringResource(R.string.cancel))
+                        }
+                    }
+                }
             }
         }
     }
@@ -105,7 +183,8 @@ fun EditCardScreen(
 @Composable
 private fun CardItem(
     goodThinking: GoodThinking,
-    updateGoodThinking: (Long, String) -> Unit
+    updateGoodThinking: (GoodThinking) -> Unit,
+    deleteGoodThinking: (Long) -> Unit
 ) {
     val isClicked = rememberSaveable { mutableStateOf(false) }
 
@@ -118,8 +197,11 @@ private fun CardItem(
         EditableGoodThinkingItem(
             isClicked = isClicked,
             goodThinking = goodThinking,
-            editGoodThinking = { id, thinking ->
-                updateGoodThinking(id, thinking)
+            updateGoodThinking = { id, thinking ->
+                updateGoodThinking(GoodThinking(id, thinking))
+            },
+            deleteGoodThinking = { id ->
+                deleteGoodThinking(id)
             }
         )
     }
@@ -151,36 +233,47 @@ private fun GoodThinkingItem(
 private fun EditableGoodThinkingItem(
     isClicked: MutableState<Boolean>,
     goodThinking: GoodThinking,
-    editGoodThinking: (Long, String) -> Unit
+    updateGoodThinking: (Long, String) -> Unit,
+    deleteGoodThinking: (Long) -> Unit
 ) {
     var word by rememberSaveable { mutableStateOf(goodThinking.thinking.trim()) }
 
     Card(
         modifier = Modifier.fillMaxWidth()
     ) {
-        TextField(
-            modifier = Modifier.padding(10.dp),
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth().padding(10.dp),
             value = word,
             onValueChange = {
-                word = it.trim()
+                word = it
             }
         )
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End
+            modifier = Modifier.fillMaxWidth()
         ) {
             TextButton(
                 onClick = {
-                    editGoodThinking(goodThinking.id, word)
+                    deleteGoodThinking(goodThinking.id)
                     isClicked.value = !isClicked.value
                 }
             ) {
-                Text("확인")
+                Text(stringResource(R.string.delete))
+            }
+            Spacer(
+                modifier = Modifier.weight(1f)
+            )
+            TextButton(
+                onClick = {
+                    updateGoodThinking(goodThinking.id, word.trim())
+                    isClicked.value = !isClicked.value
+                }
+            ) {
+                Text(stringResource(R.string.confirm))
             }
             TextButton(
                 onClick = { isClicked.value = !isClicked.value }
             ) {
-                Text("취소")
+                Text(stringResource(R.string.cancel))
             }
         }
     }

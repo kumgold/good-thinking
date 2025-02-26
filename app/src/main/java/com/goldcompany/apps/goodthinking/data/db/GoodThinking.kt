@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "good_thinking")
-class GoodThinking(
+data class GoodThinking(
     @PrimaryKey(autoGenerate = true) val id: Long = 0L,
     @ColumnInfo val thinking: String
 )

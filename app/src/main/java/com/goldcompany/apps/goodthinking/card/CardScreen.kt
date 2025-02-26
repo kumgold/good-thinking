@@ -33,11 +33,26 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CardScreen(
     navController: NavController,
     viewModel: CardViewModel = hiltViewModel()
+) {
+    val goodThinking by viewModel.goodThinking.collectAsStateWithLifecycle()
+
+    CardScreen(
+        goodThinking = goodThinking,
+        popBackStack = { navController.popBackStack() },
+        getGoodThinking = { viewModel.getGoodThinking() }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CardScreen(
+    goodThinking: String,
+    popBackStack: () -> Unit = {},
+    getGoodThinking: () -> Unit = {}
 ) {
     Scaffold(
         topBar = {
@@ -46,7 +61,7 @@ fun CardScreen(
                 navigationIcon = {
                     IconButton(
                         onClick = {
-                            navController.popBackStack()
+                            popBackStack()
                         }
                     ) {
                         Icon(
@@ -59,7 +74,6 @@ fun CardScreen(
         }
     ) { paddingValues ->
         val isCardOpened = rememberSaveable { mutableStateOf(false) }
-        val goodThinking by viewModel.goodThinking.collectAsStateWithLifecycle()
 
         LazyVerticalGrid(
             modifier = Modifier.padding(paddingValues),
@@ -71,7 +85,7 @@ fun CardScreen(
             items(15) {
                 GoodThinkingCard(
                     onClick = {
-                        viewModel.getThinkingCard()
+                        getGoodThinking()
                         isCardOpened.value = true
                     }
                 )

@@ -7,6 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,10 +19,11 @@ class CardViewModel @Inject constructor(
     private val _goodThinking = MutableStateFlow("")
     val goodThinking: StateFlow<String> = _goodThinking
 
-    fun getThinkingCard() {
+    fun getGoodThinking() {
         viewModelScope.launch(Dispatchers.IO) {
-            val card = repository.getThinking()
-            _goodThinking.value = card.thinking
+            val card = repository.getThinking().firstOrNull()
+
+            _goodThinking.value = card?.thinking ?: "좋은 생각을 추가하세요"
         }
     }
 }

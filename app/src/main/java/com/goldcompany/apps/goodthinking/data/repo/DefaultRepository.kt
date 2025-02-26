@@ -14,17 +14,21 @@ class DefaultRepository @Inject constructor(
         return goodThinkingDao.getAllThinking()
     }
 
-    suspend fun getThinking(): GoodThinking {
+    fun getThinking(): Flow<GoodThinking> {
         return goodThinkingDao.getRandomThinking()
     }
 
-    suspend fun insertGoodThinking(word: String) {
+    suspend fun insertGoodThinking(thinking: String) {
         goodThinkingDao.insertGoodThinking(
-            GoodThinking(thinking = word)
+            GoodThinking(thinking = thinking)
         )
     }
 
     suspend fun updateGoodThinking(id: Long, thinking: String) {
         goodThinkingDao.updateGoodThinking(id, thinking)
+    }
+
+    suspend fun deleteGoodThinking(id: Long) {
+        goodThinkingDao.deleteGoodThinking(id)
     }
 }

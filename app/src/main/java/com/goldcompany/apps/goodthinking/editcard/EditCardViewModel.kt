@@ -26,4 +26,16 @@ class EditCardViewModel @Inject constructor(
             repository.updateGoodThinking(id, thinking)
         }
     }
+
+    fun insertGoodThinking(thinking: String) {
+        viewModelScope.launch {
+            repository.insertGoodThinking(thinking)
+        }
+    }
+
+    fun deleteGoodThinking(id: Long) {
+        viewModelScope.launch {
+            repository.deleteGoodThinking(id)
+        }
+    }
 }

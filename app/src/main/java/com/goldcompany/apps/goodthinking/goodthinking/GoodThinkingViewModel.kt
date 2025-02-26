@@ -33,14 +33,14 @@ class GoodThinkingViewModel @Inject constructor(
         sendPrompt()
     }
 
-    private fun sendPrompt() {
+    fun sendPrompt(prompt: String? = null) {
         _uiState.value = UiState.Loading
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val response = generativeModel.generateContent(
                     content {
-                        text("오늘의 명언 하나만 보여줘")
+                        text(prompt ?: "오늘의 명언 하나만 보여줘")
                     }
                 )
                 response.text?.let { outputContent ->
