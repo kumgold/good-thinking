@@ -4,10 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.goldcompany.apps.goodthinking.card.CardScreen
-import com.goldcompany.apps.goodthinking.editcard.EditCardScreen
-import com.goldcompany.apps.goodthinking.goodthinking.GoodThinkingScreen
-import com.goldcompany.apps.goodthinking.home.HomeScreen
+import com.goldcompany.apps.goodthinking.feature.card.CardScreen
+import com.goldcompany.apps.goodthinking.feature.editcard.EditCardScreen
+import com.goldcompany.apps.goodthinking.feature.goodthinking.GoodThinkingScreen
+import com.goldcompany.apps.goodthinking.feature.home.HomeScreen
 
 object NavDestinations {
     const val HOME = "home"
