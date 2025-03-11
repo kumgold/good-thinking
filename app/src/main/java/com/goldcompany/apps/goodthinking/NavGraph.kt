@@ -1,10 +1,12 @@
 package com.goldcompany.apps.goodthinking
 
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.goldcompany.apps.goodthinking.feature.card.CardScreen
+import com.goldcompany.apps.goodthinking.feature.chat.ChatScreen
 import com.goldcompany.apps.goodthinking.feature.editcard.EditCardScreen
 import com.goldcompany.apps.goodthinking.feature.goodthinking.GoodThinkingScreen
 import com.goldcompany.apps.goodthinking.feature.home.HomeScreen
@@ -14,8 +16,10 @@ object NavDestinations {
     const val GOOD_WORD = "good_word"
     const val CARD = "card"
     const val EDIT_CARD = "edit_card"
+    const val CHAT = "chat"
 }
 
+@RequiresApi(35)
 @Composable
 fun NavGraph() {
     val navController = rememberNavController()
@@ -29,6 +33,9 @@ fun NavGraph() {
         }
         composable(NavDestinations.CARD) {
             CardScreen(navController = navController)
+        }
+        composable(NavDestinations.CHAT) {
+            ChatScreen()
         }
         composable(NavDestinations.EDIT_CARD) {
             EditCardScreen(navController = navController)

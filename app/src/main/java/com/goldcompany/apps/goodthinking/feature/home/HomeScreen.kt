@@ -32,6 +32,9 @@ fun HomeScreen(
         MainButton(text = "좋은 생각 카드") {
             navController.navigate(NavDestinations.CARD)
         }
+        MainButton(text = "챗봇 대화") {
+            navController.navigate(NavDestinations.CHAT)
+        }
         MainButton(text = "카드 편집") {
             navController.navigate(NavDestinations.EDIT_CARD)
         }
