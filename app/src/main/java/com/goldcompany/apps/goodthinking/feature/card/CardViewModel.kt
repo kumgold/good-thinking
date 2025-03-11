@@ -1,4 +1,4 @@
-package com.goldcompany.apps.goodthinking.card
+package com.goldcompany.apps.goodthinking.feature.card
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

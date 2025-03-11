@@ -1,4 +1,4 @@
-package com.goldcompany.apps.goodthinking.goodthinking
+package com.goldcompany.apps.goodthinking.feature.goodthinking
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn

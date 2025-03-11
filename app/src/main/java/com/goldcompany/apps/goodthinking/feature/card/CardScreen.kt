@@ -1,4 +1,4 @@
-package com.goldcompany.apps.goodthinking.card
+package com.goldcompany.apps.goodthinking.feature.card
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

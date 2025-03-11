@@ -1,4 +1,4 @@
-package com.goldcompany.apps.goodthinking.home
+package com.goldcompany.apps.goodthinking.feature.home
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

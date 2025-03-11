@@ -1,4 +1,4 @@
-package com.goldcompany.apps.goodthinking.editcard
+package com.goldcompany.apps.goodthinking.feature.editcard
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
