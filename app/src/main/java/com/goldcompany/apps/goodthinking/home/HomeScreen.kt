@@ -27,7 +27,7 @@ fun HomeScreen(
         verticalArrangement = Arrangement.Center
     ) {
         MainButton(text = "오늘의 명언") {
-            navController.navigate(NavDestinations.GOOD_THINKING)
+            navController.navigate(NavDestinations.GOOD_WORD)
         }
         MainButton(text = "좋은 생각 카드") {
             navController.navigate(NavDestinations.CARD)

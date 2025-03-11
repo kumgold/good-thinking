@@ -4,9 +4,9 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.goldcompany.apps.goodthinking.data.db.GoodThinking
+import com.goldcompany.apps.goodthinking.data.db.GoodWord
 import com.goldcompany.apps.goodthinking.editcard.EditCardScreen
-import com.goldcompany.apps.goodthinking.utilities.testGoodThinking
+import com.goldcompany.apps.goodthinking.utilities.testGoodWord
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -25,12 +25,12 @@ class EditCardTest {
 
     @Test
     fun card_notEmptyCard() {
-        startEditCard(listOf(testGoodThinking))
+        startEditCard(listOf(testGoodWord))
         composeTestRule.onNodeWithText("좋은 생각을 추가하세요").assertDoesNotExist()
-        composeTestRule.onNodeWithText(testGoodThinking.thinking).assertIsDisplayed()
+        composeTestRule.onNodeWithText(testGoodWord.word).assertIsDisplayed()
     }
 
-    private fun startEditCard(thinkingList: List<GoodThinking>) {
+    private fun startEditCard(thinkingList: List<GoodWord>) {
         composeTestRule.setContent {
             EditCardScreen(thinkingList = thinkingList)
         }

@@ -38,7 +38,7 @@ fun CardScreen(
     navController: NavController,
     viewModel: CardViewModel = hiltViewModel()
 ) {
-    val goodThinking by viewModel.goodThinking.collectAsStateWithLifecycle()
+    val goodThinking by viewModel.goodWord.collectAsStateWithLifecycle()
 
     CardScreen(
         goodThinking = goodThinking,

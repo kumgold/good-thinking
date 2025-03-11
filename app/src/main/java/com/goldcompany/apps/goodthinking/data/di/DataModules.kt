@@ -2,7 +2,7 @@ package com.goldcompany.apps.goodthinking.data.di
 
 import android.content.Context
 import com.goldcompany.apps.goodthinking.data.db.AppDatabase
-import com.goldcompany.apps.goodthinking.data.db.GoodThinkingDao
+import com.goldcompany.apps.goodthinking.data.db.GoodWordDao
 import com.goldcompany.apps.goodthinking.data.repo.DefaultRepository
 import dagger.Module
 import dagger.Provides
@@ -24,7 +24,7 @@ object DataModules {
     @Provides
     fun provideGoodThinkingDao(
         appDatabase: AppDatabase
-    ): GoodThinkingDao = appDatabase.goodThinkingDao()
+    ): GoodWordDao = appDatabase.goodWordDao()
 }
 
 @Module
@@ -33,6 +33,6 @@ object RepositoryModule {
     @Singleton
     @Provides
     fun provideDefaultRepository(
-        goodThinkingDao: GoodThinkingDao
-    ): DefaultRepository = DefaultRepository(goodThinkingDao)
+        goodWordDao: GoodWordDao
+    ): DefaultRepository = DefaultRepository(goodWordDao)
 }

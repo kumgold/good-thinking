@@ -52,11 +52,11 @@ class GoodThinkingViewModel @Inject constructor(
         }
     }
 
-    fun insertGoodThinking() {
+    fun insertGoodWord() {
         viewModelScope.launch(Dispatchers.IO) {
             if (_uiState.value is UiState.Success) {
                 val word = (_uiState.value as UiState.Success).outputText
-                repository.insertGoodThinking(word)
+                repository.insertGoodWord(word)
             }
         }
     }

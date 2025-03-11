@@ -11,7 +11,7 @@ import com.goldcompany.apps.goodthinking.home.HomeScreen
 
 object NavDestinations {
     const val HOME = "home"
-    const val GOOD_THINKING = "good_thinking"
+    const val GOOD_WORD = "good_word"
     const val CARD = "card"
     const val EDIT_CARD = "edit_card"
 }
@@ -24,7 +24,7 @@ fun NavGraph() {
         composable(NavDestinations.HOME) {
             HomeScreen(navController = navController)
         }
-        composable(NavDestinations.GOOD_THINKING) {
+        composable(NavDestinations.GOOD_WORD) {
             GoodThinkingScreen(navController = navController)
         }
         composable(NavDestinations.CARD) {

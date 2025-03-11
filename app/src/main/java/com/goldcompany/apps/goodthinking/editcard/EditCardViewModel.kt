@@ -14,7 +14,7 @@ class EditCardViewModel @Inject constructor(
     private val repository: DefaultRepository
 ) : ViewModel() {
 
-    val thinkingList = repository.getAllThinking()
+    val thinkingList = repository.getAllGoodWord()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
@@ -23,19 +23,19 @@ class EditCardViewModel @Inject constructor(
 
     fun updateGoodThinking(id: Long, thinking: String) {
         viewModelScope.launch {
-            repository.updateGoodThinking(id, thinking)
+            repository.updateGoodWord(id, thinking)
         }
     }
 
     fun insertGoodThinking(thinking: String) {
         viewModelScope.launch {
-            repository.insertGoodThinking(thinking)
+            repository.insertGoodWord(thinking)
         }
     }
 
     fun deleteGoodThinking(id: Long) {
         viewModelScope.launch {
-            repository.deleteGoodThinking(id)
+            repository.deleteGoodWord(id)
         }
     }
 }

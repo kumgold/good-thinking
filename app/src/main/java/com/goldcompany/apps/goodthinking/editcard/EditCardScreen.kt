@@ -42,7 +42,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.goldcompany.apps.goodthinking.R
-import com.goldcompany.apps.goodthinking.data.db.GoodThinking
+import com.goldcompany.apps.goodthinking.data.db.GoodWord
 
 
 @Composable
@@ -55,7 +55,7 @@ fun EditCardScreen(
     EditCardScreen(
         thinkingList = thinkingList,
         popBackStack = { navController.popBackStack() },
-        updateGoodThinking = { data -> viewModel.updateGoodThinking(data.id, data.thinking) },
+        updateGoodThinking = { data -> viewModel.updateGoodThinking(data.id, data.word) },
         insertGoodThinking = { thinking -> viewModel.insertGoodThinking(thinking)},
         deleteGoodThinking = { id -> viewModel.deleteGoodThinking(id) }
     )
@@ -64,9 +64,9 @@ fun EditCardScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditCardScreen(
-    thinkingList: List<GoodThinking>,
+    thinkingList: List<GoodWord>,
     popBackStack: () -> Unit = {},
-    updateGoodThinking: (GoodThinking) -> Unit = {},
+    updateGoodThinking: (GoodWord) -> Unit = {},
     insertGoodThinking: (String) -> Unit = {},
     deleteGoodThinking: (Long) -> Unit = {}
 ) {
@@ -120,7 +120,7 @@ fun EditCardScreen(
 
             items(thinkingList) {
                 CardItem(
-                    goodThinking = it,
+                    goodWord = it,
                     updateGoodThinking = { data ->
                         updateGoodThinking(data)
                     },
@@ -182,8 +182,8 @@ fun EditCardScreen(
 
 @Composable
 private fun CardItem(
-    goodThinking: GoodThinking,
-    updateGoodThinking: (GoodThinking) -> Unit,
+    goodWord: GoodWord,
+    updateGoodThinking: (GoodWord) -> Unit,
     deleteGoodThinking: (Long) -> Unit
 ) {
     val isClicked = rememberSaveable { mutableStateOf(false) }
@@ -191,14 +191,14 @@ private fun CardItem(
     if (!isClicked.value) {
         GoodThinkingItem(
             isClicked = isClicked,
-            word = goodThinking.thinking
+            word = goodWord.word
         )
     } else {
         EditableGoodThinkingItem(
             isClicked = isClicked,
-            goodThinking = goodThinking,
+            goodWord = goodWord,
             updateGoodThinking = { id, thinking ->
-                updateGoodThinking(GoodThinking(id, thinking))
+                updateGoodThinking(GoodWord(id, thinking))
             },
             deleteGoodThinking = { id ->
                 deleteGoodThinking(id)
@@ -232,11 +232,11 @@ private fun GoodThinkingItem(
 @Composable
 private fun EditableGoodThinkingItem(
     isClicked: MutableState<Boolean>,
-    goodThinking: GoodThinking,
+    goodWord: GoodWord,
     updateGoodThinking: (Long, String) -> Unit,
     deleteGoodThinking: (Long) -> Unit
 ) {
-    var word by rememberSaveable { mutableStateOf(goodThinking.thinking.trim()) }
+    var word by rememberSaveable { mutableStateOf(goodWord.word.trim()) }
 
     Card(
         modifier = Modifier.fillMaxWidth()
@@ -253,7 +253,7 @@ private fun EditableGoodThinkingItem(
         ) {
             TextButton(
                 onClick = {
-                    deleteGoodThinking(goodThinking.id)
+                    deleteGoodThinking(goodWord.id)
                     isClicked.value = !isClicked.value
                 }
             ) {
@@ -264,7 +264,7 @@ private fun EditableGoodThinkingItem(
             )
             TextButton(
                 onClick = {
-                    updateGoodThinking(goodThinking.id, word.trim())
+                    updateGoodThinking(goodWord.id, word.trim())
                     isClicked.value = !isClicked.value
                 }
             ) {

@@ -16,14 +16,14 @@ class CardViewModel @Inject constructor(
     private val repository: DefaultRepository
 ) : ViewModel() {
 
-    private val _goodThinking = MutableStateFlow("")
-    val goodThinking: StateFlow<String> = _goodThinking
+    private val _goodWord = MutableStateFlow("")
+    val goodWord: StateFlow<String> = _goodWord
 
     fun getGoodThinking() {
         viewModelScope.launch(Dispatchers.IO) {
-            val card = repository.getThinking().firstOrNull()
+            val card = repository.getRandomGoodWord().firstOrNull()
 
-            _goodThinking.value = card?.thinking ?: "좋은 생각을 추가하세요"
+            _goodWord.value = card?.word ?: "좋은 생각을 추가하세요"
         }
     }
 }
