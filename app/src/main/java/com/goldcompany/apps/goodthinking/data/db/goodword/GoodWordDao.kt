@@ -1,4 +1,4 @@
-package com.goldcompany.apps.goodthinking.data.db
+package com.goldcompany.apps.goodthinking.data.db.goodword
 
 import androidx.room.Dao
 import androidx.room.Insert

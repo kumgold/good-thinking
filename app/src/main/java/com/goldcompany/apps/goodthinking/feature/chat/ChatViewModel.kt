@@ -1,8 +1,8 @@
 package com.goldcompany.apps.goodthinking.feature.chat
 
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.goldcompany.apps.goodthinking.data.repo.DefaultRepository
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.asTextOrNull
 import com.google.ai.client.generativeai.type.content
@@ -14,19 +14,10 @@ import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
 
-enum class Participant {
-    USER, MODEL, ERROR
-}
-
-data class ChatMessage(
-    val id: String = UUID.randomUUID().toString(),
-    var text: String = "",
-    val participant: Participant = Participant.USER,
-    var isPending: Boolean = false
-)
-
-class ChatViewModel constructor(
-    private val generativeModel: GenerativeModel
+@HiltViewModel
+class ChatViewModel @Inject constructor(
+    private val generativeModel: GenerativeModel,
+    private val repository: DefaultRepository
 ) : ViewModel() {
     private val chat = generativeModel.startChat(
         history = listOf(
@@ -37,7 +28,6 @@ class ChatViewModel constructor(
 
     private val _uiState: MutableStateFlow<ChatUiState> =
         MutableStateFlow(ChatUiState(chat.history.map { content ->
-            // Map the initial messages
             ChatMessage(
                 text = content.parts.first().asTextOrNull() ?: "",
                 participant = if (content.role == "user") Participant.USER else Participant.MODEL,
@@ -46,8 +36,6 @@ class ChatViewModel constructor(
         }))
     val uiState: StateFlow<ChatUiState> = _uiState.asStateFlow()
 
-
-    @RequiresApi(35)
     fun sendMessage(userMessage: String) {
         _uiState.value.addMessage(
             ChatMessage(

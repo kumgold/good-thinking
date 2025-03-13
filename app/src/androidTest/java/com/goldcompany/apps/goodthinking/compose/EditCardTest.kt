@@ -4,7 +4,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.goldcompany.apps.goodthinking.data.db.GoodWord
+import com.goldcompany.apps.goodthinking.data.db.goodword.GoodWord
 import com.goldcompany.apps.goodthinking.feature.editcard.EditCardScreen
 import com.goldcompany.apps.goodthinking.utilities.testGoodWord
 import org.junit.Rule

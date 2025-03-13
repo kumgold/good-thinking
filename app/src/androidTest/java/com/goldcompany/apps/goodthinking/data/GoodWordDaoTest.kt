@@ -5,8 +5,8 @@ import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.goldcompany.apps.goodthinking.data.db.AppDatabase
-import com.goldcompany.apps.goodthinking.data.db.GoodWord
-import com.goldcompany.apps.goodthinking.data.db.GoodWordDao
+import com.goldcompany.apps.goodthinking.data.db.goodword.GoodWord
+import com.goldcompany.apps.goodthinking.data.db.goodword.GoodWordDao
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.MatcherAssert.assertThat

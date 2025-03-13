@@ -1,6 +1,5 @@
 package com.goldcompany.apps.goodthinking.feature.chat
 
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.toMutableStateList
 
 class ChatUiState(
@@ -13,12 +12,11 @@ class ChatUiState(
         _messages.add(msg)
     }
 
-    @RequiresApi(35)
     fun replaceLastPendingMessage() {
         val lastMessage = _messages.lastOrNull()
         lastMessage?.let {
             val newMessage = lastMessage.apply { isPending = false }
-            _messages.removeLast()
+            _messages.removeAt(_messages.lastIndex)
             _messages.add(newMessage)
         }
     }

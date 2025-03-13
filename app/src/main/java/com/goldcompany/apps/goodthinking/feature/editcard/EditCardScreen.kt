@@ -42,7 +42,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.goldcompany.apps.goodthinking.R
-import com.goldcompany.apps.goodthinking.data.db.GoodWord
+import com.goldcompany.apps.goodthinking.data.db.goodword.GoodWord
 
 
 @Composable

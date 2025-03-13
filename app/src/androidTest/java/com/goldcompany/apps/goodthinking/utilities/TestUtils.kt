@@ -1,5 +1,5 @@
 package com.goldcompany.apps.goodthinking.utilities
 
-import com.goldcompany.apps.goodthinking.data.db.GoodWord
+import com.goldcompany.apps.goodthinking.data.db.goodword.GoodWord
 
 val testGoodWord = GoodWord(0L, "Something good word")
