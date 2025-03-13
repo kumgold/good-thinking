@@ -35,7 +35,11 @@ class DefaultRepository @Inject constructor(
         goodWordDao.deleteGoodWord(id)
     }
 
-    fun getAllMessages(): Flow<List<ChatMessageLocal>> {
+    suspend fun getAllMessages(): List<ChatMessageLocal> {
         return chatMessageDao.getAllMessages()
+    }
+
+    suspend fun insertMessage(message: ChatMessageLocal) {
+        chatMessageDao.insertMessage(message = message)
     }
 }
