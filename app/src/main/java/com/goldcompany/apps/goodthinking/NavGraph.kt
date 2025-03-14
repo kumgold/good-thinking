@@ -1,6 +1,5 @@
 package com.goldcompany.apps.goodthinking
 
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -19,7 +18,6 @@ object NavDestinations {
     const val CHAT = "chat"
 }
 
-@RequiresApi(35)
 @Composable
 fun NavGraph() {
     val navController = rememberNavController()
