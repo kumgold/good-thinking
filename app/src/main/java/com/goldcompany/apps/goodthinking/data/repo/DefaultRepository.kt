@@ -42,4 +42,8 @@ class DefaultRepository @Inject constructor(
     suspend fun insertMessage(message: ChatMessageLocal) {
         chatMessageDao.insertMessage(message = message)
     }
+
+    suspend fun deleteMessages(ids: List<String>) {
+        chatMessageDao.deleteMessage(ids)
+    }
 }

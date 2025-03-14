@@ -24,6 +24,10 @@ class ChatViewModel @Inject constructor(
     private lateinit var chat: Chat
 
     init {
+        init()
+    }
+
+    private fun init() {
         viewModelScope.launch {
             val messages = repository.getAllMessages().map { it.toDefault() }
 
@@ -32,16 +36,13 @@ class ChatViewModel @Inject constructor(
     }
 
     private fun initializeChatMessages(messages: List<ChatMessage>) {
-        val history = messages.map { message ->
-            val participant = if (message.participant == Participant.USER) "user" else "model"
-
-            content(role = participant) { text(message.text) }
-        }
+        val history = messages.map { message -> message.toContent() }
 
         chat = generativeModel.startChat(history = history)
 
-        _uiState.value = ChatUiState(chat.history.map { content ->
+        _uiState.value = ChatUiState(chat.history.mapIndexed { index, content ->
             ChatMessage(
+                id = messages[index].id,
                 text = content.parts.first().asTextOrNull() ?: "",
                 participant = if (content.role == "user") Participant.USER else Participant.MODEL,
                 isPending = false
@@ -49,36 +50,32 @@ class ChatViewModel @Inject constructor(
         })
     }
 
-
     private val _uiState: MutableStateFlow<ChatUiState> = MutableStateFlow(ChatUiState(emptyList()))
     val uiState: StateFlow<ChatUiState> = _uiState.asStateFlow()
 
     fun sendMessage(userMessage: String) {
-        val message = ChatMessage(
-            text = userMessage,
-            participant = Participant.USER,
-            isPending = true
-        )
-
-        _uiState.value.addMessage(message)
-
         viewModelScope.launch {
             try {
-                repository.insertMessage(message.toLocal())
+                addMessage(
+                    ChatMessage(
+                        text = userMessage,
+                        participant = Participant.USER,
+                        isPending = true
+                    )
+                )
 
                 val response = chat.sendMessage(userMessage)
 
                 _uiState.value.replaceLastPendingMessage()
 
                 response.text?.let { modelResponse ->
-                    val modelMessage = ChatMessage(
-                        text = modelResponse,
-                        participant = Participant.MODEL,
-                        isPending = false
+                    addMessage(
+                        ChatMessage(
+                            text = modelResponse,
+                            participant = Participant.MODEL,
+                            isPending = false
+                        )
                     )
-
-                    _uiState.value.addMessage(modelMessage)
-                    repository.insertMessage(modelMessage.toLocal())
                 }
             } catch (e: Exception) {
                 _uiState.value.replaceLastPendingMessage()
@@ -90,5 +87,10 @@ class ChatViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    private suspend fun addMessage(message: ChatMessage) {
+        repository.insertMessage(message.toLocal())
+        _uiState.value.addMessage(message)
     }
 }
