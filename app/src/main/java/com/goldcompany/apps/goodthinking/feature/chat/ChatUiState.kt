@@ -20,4 +20,8 @@ class ChatUiState(
             _messages.add(newMessage)
         }
     }
+
+    fun deleteMessage(message: ChatMessage) {
+        _messages.remove(message)
+    }
 }

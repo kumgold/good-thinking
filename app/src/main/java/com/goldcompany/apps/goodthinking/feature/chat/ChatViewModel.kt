@@ -7,7 +7,6 @@ import com.goldcompany.apps.goodthinking.data.repo.DefaultRepository
 import com.google.ai.client.generativeai.Chat
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.asTextOrNull
-import com.google.ai.client.generativeai.type.content
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,6 +21,9 @@ class ChatViewModel @Inject constructor(
 ) : ViewModel() {
 
     private lateinit var chat: Chat
+
+    private val _uiState: MutableStateFlow<ChatUiState> = MutableStateFlow(ChatUiState(emptyList()))
+    val uiState: StateFlow<ChatUiState> = _uiState.asStateFlow()
 
     init {
         init()
@@ -49,9 +51,6 @@ class ChatViewModel @Inject constructor(
             )
         })
     }
-
-    private val _uiState: MutableStateFlow<ChatUiState> = MutableStateFlow(ChatUiState(emptyList()))
-    val uiState: StateFlow<ChatUiState> = _uiState.asStateFlow()
 
     fun sendMessage(userMessage: String) {
         viewModelScope.launch {
@@ -92,5 +91,28 @@ class ChatViewModel @Inject constructor(
     private suspend fun addMessage(message: ChatMessage) {
         repository.insertMessage(message.toLocal())
         _uiState.value.addMessage(message)
+    }
+
+    private val ids = mutableListOf<String>()
+
+    fun selectMessage(id: String) {
+        if (ids.contains(id)) {
+            ids.remove(id)
+        } else {
+            ids.add(id)
+        }
+    }
+
+    fun deleteMessages() {
+        viewModelScope.launch {
+            ids.forEach { id ->
+                repository.getChatMessage(id)?.let {
+                    _uiState.value.deleteMessage(it.toDefault())
+                }
+            }
+
+            repository.deleteMessages(ids)
+            ids.clear()
+        }
     }
 }

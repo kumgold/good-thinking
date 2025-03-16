@@ -1,5 +1,8 @@
 package com.goldcompany.apps.goodthinking.feature.chat
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,6 +21,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,8 +31,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -36,8 +42,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -54,6 +62,8 @@ fun ChatScreen(
     val chatUiState by chatViewModel.uiState.collectAsStateWithLifecycle()
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
+
+    val isEditMode = rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -74,16 +84,23 @@ fun ChatScreen(
             )
         },
         bottomBar = {
-            MessageInput(
-                onSendMessage = { inputText ->
-                    chatViewModel.sendMessage(inputText)
-                },
-                resetScroll = {
-                    coroutineScope.launch {
-                        listState.scrollToItem(0)
-                    }
+            if (isEditMode.value) {
+                DeleteButton {
+                    chatViewModel.deleteMessages()
+                    isEditMode.value = false
                 }
-            )
+            } else {
+                MessageInput(
+                    onSendMessage = { inputText ->
+                        chatViewModel.sendMessage(inputText)
+                    },
+                    resetScroll = {
+                        coroutineScope.launch {
+                            listState.scrollToItem(0)
+                        }
+                    }
+                )
+            }
         }
     ) { paddingValues ->
         Column(
@@ -91,7 +108,14 @@ fun ChatScreen(
                 .padding(paddingValues)
                 .fillMaxSize()
         ) {
-            ChatList(chatUiState.messages, listState)
+            ChatList(
+                chatMessages = chatUiState.messages,
+                listState = listState,
+                isEditMode = isEditMode,
+                selectMessage = { id ->
+                    chatViewModel.selectMessage(id)
+                }
+            )
         }
     }
 }
@@ -99,22 +123,38 @@ fun ChatScreen(
 @Composable
 fun ChatList(
     chatMessages: List<ChatMessage>,
-    listState: LazyListState
+    listState: LazyListState,
+    isEditMode: MutableState<Boolean>,
+    selectMessage: (String) -> Unit
 ) {
     LazyColumn(
         reverseLayout = true,
         state = listState
     ) {
         items(chatMessages.reversed()) { message ->
-            ChatBubbleItem(message)
+            ChatBubbleItem(
+                message,
+                isEditMode,
+                selectMessage = selectMessage
+            )
         }
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ChatBubbleItem(
-    chatMessage: ChatMessage
+    chatMessage: ChatMessage,
+    isEditMode: MutableState<Boolean>,
+    selectMessage: (String) -> Unit
 ) {
+    var isSelect by rememberSaveable { mutableStateOf(false) }
+
+    fun clickMessage() {
+        selectMessage(chatMessage.id)
+        isSelect = !isSelect
+    }
+
     val isModelMessage = chatMessage.participant == Participant.MODEL ||
             chatMessage.participant == Participant.ERROR
 
@@ -140,6 +180,16 @@ fun ChatBubbleItem(
         horizontalAlignment = horizontalAlignment,
         modifier = Modifier
             .padding(horizontal = 8.dp, vertical = 4.dp)
+            .combinedClickable(
+                onClick = {
+                    if (isEditMode.value) {
+                        clickMessage()
+                    }
+                },
+                onLongClick = {
+                    isEditMode.value = !isEditMode.value
+                }
+            )
             .fillMaxWidth()
     ) {
         Text(
@@ -148,6 +198,14 @@ fun ChatBubbleItem(
             modifier = Modifier.padding(bottom = 4.dp)
         )
         Row {
+            if (isEditMode.value) {
+                Checkbox(
+                    checked = isSelect,
+                    onCheckedChange = {
+                        clickMessage()
+                    }
+                )
+            }
             if (chatMessage.isPending) {
                 CircularProgressIndicator(
                     modifier = Modifier
@@ -172,7 +230,26 @@ fun ChatBubbleItem(
 }
 
 @Composable
-fun MessageInput(
+private fun DeleteButton(
+    onClick: () -> Unit
+) {
+    TextButton(
+        modifier = Modifier
+            .background(color = Color.Red)
+            .fillMaxWidth(),
+        onClick = onClick,
+    ) {
+        Text(
+            modifier = Modifier.padding(16.dp),
+            text = "삭제",
+            color = Color.White,
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+@Composable
+private fun MessageInput(
     onSendMessage: (String) -> Unit,
     resetScroll: () -> Unit = {}
 ) {

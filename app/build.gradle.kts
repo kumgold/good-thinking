@@ -52,6 +52,13 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    configurations.all {
+        resolutionStrategy {
+            dependencySubstitution {
+                substitute(module("org.hamcrest:hamcrest-all:3.0")).using(module("junit:junit:4.13.2"))
+            }
+        }
+    }
 }
 
 dependencies {

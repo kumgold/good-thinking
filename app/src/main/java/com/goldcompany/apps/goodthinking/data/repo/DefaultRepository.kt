@@ -35,6 +35,10 @@ class DefaultRepository @Inject constructor(
         goodWordDao.deleteGoodWord(id)
     }
 
+    suspend fun getChatMessage(id: String): ChatMessageLocal? {
+        return chatMessageDao.getChatMessage(id)
+    }
+
     suspend fun getAllMessages(): List<ChatMessageLocal> {
         return chatMessageDao.getAllMessages()
     }
@@ -44,6 +48,10 @@ class DefaultRepository @Inject constructor(
     }
 
     suspend fun deleteMessages(ids: List<String>) {
-        chatMessageDao.deleteMessage(ids)
+        try {
+            chatMessageDao.deleteMessages(ids)
+        } catch (e: Exception) {
+            println(e)
+        }
     }
 }
