@@ -12,8 +12,8 @@
 <img src="./images/good_thinking5.png">
 
 ## 기술 스택
-UI : Android Compose <br>
-API : Gemini api <br>
-Database : ROOM <br>
-Async : Coroutine Flow <br>
-Test Code: JUnit4, AndroidJUnit4 <br>
+Android Compose <br>
+Gemini api <br>
+ROOM <br>
+Coroutine Flow <br>
+JUnit4, AndroidJUnit4 <br>
