@@ -118,9 +118,11 @@ fun EditCardScreen(
         }
     ) { paddingValues ->
         LazyColumn(
-            modifier = Modifier.padding(paddingValues).fillMaxSize(),
+            modifier = Modifier.padding(paddingValues)
+                .padding(horizontal = 8.dp)
+                .fillMaxSize(),
             contentPadding = PaddingValues(5.dp),
-            verticalArrangement = Arrangement.spacedBy(5.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             item {
                 if (thinkingList.isEmpty()) {
