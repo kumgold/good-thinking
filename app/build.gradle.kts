@@ -88,6 +88,9 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.generativeai)
 
+    // Material
+    implementation(libs.androidx.material.icons.extended.android)
+
     // Test
     testImplementation(libs.hamcrest.all)
     testImplementation(libs.junit)
