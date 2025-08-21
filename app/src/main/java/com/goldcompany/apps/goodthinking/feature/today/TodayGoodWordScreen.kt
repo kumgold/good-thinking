@@ -23,6 +23,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -31,6 +32,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
@@ -41,7 +43,6 @@ import androidx.navigation.NavController
 import com.goldcompany.apps.goodthinking.R
 import com.goldcompany.apps.goodthinking.UiState
 import kotlinx.coroutines.delay
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,7 +58,7 @@ fun TodayGoodWordScreen(
 
     LaunchedEffect(isVisible) {
         if (!isVisible) {
-            delay(3000L)
+            delay(1200L)
             isVisible = true
         }
     }
@@ -70,16 +71,19 @@ fun TodayGoodWordScreen(
                 enter = fadeIn(initialAlpha = 0.0f)
             ) {
                 TopAppBar(
-                    title = {},
+                    title = { Text("오늘의 좋은 생각") },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        titleContentColor = MaterialTheme.colorScheme.primaryContainer
+                    ),
                     navigationIcon = {
                         IconButton(
-                            onClick = {
-                                navController.popBackStack()
-                            }
+                            onClick = { navController.popBackStack() }
                         ) {
                             Icon(
                                 Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "back"
+                                contentDescription = "back",
+                                tint = MaterialTheme.colorScheme.primaryContainer
                             )
                         }
                     },
@@ -93,7 +97,8 @@ fun TodayGoodWordScreen(
                         ) {
                             Icon(
                                 Icons.Default.AddCircle,
-                                contentDescription = "add"
+                                contentDescription = "add",
+                                tint = MaterialTheme.colorScheme.primaryContainer
                             )
                         }
                     }
@@ -110,15 +115,15 @@ fun TodayGoodWordScreen(
                 OutlinedTextField(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(10.dp),
+                        .padding(12.dp),
                     value = prompt,
-                    onValueChange = {
-                        prompt = it
-                    },
+                    onValueChange = { prompt = it },
                     label = { Text(stringResource(R.string.label_prompt)) },
-                    keyboardOptions = KeyboardOptions(
-                        imeAction = ImeAction.Search
-                    ),
+                    leadingIcon = {
+                        Icon(Icons.Default.AddCircle, contentDescription = null)
+                    },
+                    shape = MaterialTheme.shapes.medium,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                     keyboardActions = KeyboardActions(
                         onSearch = {
                             viewModel.sendPrompt(prompt.trim())
@@ -136,27 +141,49 @@ fun TodayGoodWordScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (uiState is UiState.Loading) {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
-            } else {
-                var textColor = MaterialTheme.colorScheme.onSurface
-                if (uiState is UiState.Error) {
-                    textColor = MaterialTheme.colorScheme.error
-                    result = (uiState as UiState.Error).errorMessage
-                } else if (uiState is UiState.Success) {
-                    textColor = MaterialTheme.colorScheme.onSurface
-                    result = (uiState as UiState.Success).outputText
+            when (uiState) {
+                is UiState.Loading -> {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        CircularProgressIndicator()
+                        Text(
+                            text = "잠시만 기다려 주세요...",
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.padding(top = 12.dp)
+                        )
+                    }
                 }
 
-                Text(
-                    text = result,
-                    textAlign = TextAlign.Center,
-                    color = textColor,
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(16.dp)
-                )
+                is UiState.Error -> {
+                    result = (uiState as UiState.Error).errorMessage
+                    ResultCard(text = result, color = MaterialTheme.colorScheme.error)
+                }
+
+                is UiState.Success -> {
+                    result = (uiState as UiState.Success).outputText
+                    ResultCard(text = result, color = MaterialTheme.colorScheme.primary)
+                }
+
+                else -> {}
             }
         }
+    }
+}
+
+@Composable
+private fun ResultCard(text: String, color: Color) {
+    androidx.compose.material3.Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        shape = MaterialTheme.shapes.large,
+        elevation = androidx.compose.material3.CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodyLarge,
+            color = color,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(24.dp)
+        )
     }
 }

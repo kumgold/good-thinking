@@ -1,34 +1,35 @@
 package com.goldcompany.apps.goodthinking.feature.card
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material.icons.filled.Lightbulb
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -57,73 +58,102 @@ fun CardScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {},
+                title = { Text("Good Thinking", style = MaterialTheme.typography.titleLarge) },
                 navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            popBackStack()
-                        }
-                    ) {
+                    IconButton(onClick = popBackStack) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "back"
+                            contentDescription = "back",
+                            tint = MaterialTheme.colorScheme.primaryContainer
                         )
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.primaryContainer
+                )
             )
         }
     ) { paddingValues ->
-        val isCardOpened = rememberSaveable { mutableStateOf(false) }
+        val isFlipped = rememberSaveable { mutableStateOf(false) }
 
-        LazyVerticalGrid(
-            modifier = Modifier.padding(paddingValues),
-            columns = GridCells.Fixed(3),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = PaddingValues(8.dp),
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+            contentAlignment = Alignment.Center
         ) {
-            items(15) {
-                GoodThinkingCard(
-                    onClick = {
-                        getGoodThinking()
-                        isCardOpened.value = true
-                    }
-                )
-            }
-        }
+            FlipCard(
+                isFlipped = isFlipped.value,
+                onClick = {
+                    isFlipped.value = !isFlipped.value
 
-        if (isCardOpened.value) {
-            BasicAlertDialog(
-                modifier = Modifier.widthIn(300.dp, 350.dp).aspectRatio(ratio = 9/16f),
-                onDismissRequest = { isCardOpened.value = false },
-                properties = DialogProperties(
-                    usePlatformDefaultWidth = false
-                ),
-            ) {
-                Card(
-                    modifier = Modifier.fillMaxSize()
-                ) {
+                    if (isFlipped.value) {
+                        getGoodThinking()
+                    }
+                },
+                front = {
+                    Icon(
+                        imageVector = Icons.Filled.Lightbulb,
+                        contentDescription = null,
+                        modifier = Modifier.size(56.dp),
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                },
+                back = {
                     Text(
-                        modifier = Modifier
-                            .padding(10.dp)
-                            .fillMaxSize()
-                            .wrapContentSize(),
                         text = goodThinking,
+                        style = MaterialTheme.typography.titleMedium,
                         textAlign = TextAlign.Center
                     )
                 }
-            }
+            )
         }
     }
 }
 
 @Composable
-private fun GoodThinkingCard(
-    onClick: () -> Unit
+fun FlipCard(
+    isFlipped: Boolean,
+    onClick: () -> Unit,
+    front: @Composable () -> Unit,
+    back: @Composable () -> Unit
 ) {
+    val rotation by animateFloatAsState(
+        targetValue = if (isFlipped) 180f else 0f,
+        animationSpec = tween(
+            durationMillis = 1000,
+            easing = FastOutSlowInEasing
+        ),
+        label = "cardRotation"
+    )
+
     Card(
         modifier = Modifier
-            .size(width = 90.dp, height = 160.dp)
-            .clickable { onClick() }
-    ) {}
+            .size(width = 200.dp, height = 300.dp)
+            .graphicsLayer {
+                rotationY = rotation
+                cameraDistance = 12f * density
+            }
+            .clickable { onClick() },
+        elevation = CardDefaults.cardElevation(8.dp),
+        shape = MaterialTheme.shapes.medium,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize().padding(16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            if (rotation <= 90f) {
+                front()
+            } else {
+                Box(
+                    modifier = Modifier.graphicsLayer { rotationY = 180f },
+                    contentAlignment = Alignment.Center
+                ) {
+                    back()
+                }
+            }
+        }
+    }
 }
