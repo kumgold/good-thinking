@@ -243,7 +243,7 @@ private fun GoodThinkingItem(
         Text(
             modifier = Modifier.padding(10.dp),
             text = word.trim(),
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodySmall
         )
     }
 }

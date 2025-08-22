@@ -71,7 +71,12 @@ fun TodayGoodWordScreen(
                 enter = fadeIn(initialAlpha = 0.0f)
             ) {
                 TopAppBar(
-                    title = { Text("오늘의 좋은 생각", style = MaterialTheme.typography.titleMedium) },
+                    title = {
+                        Text(
+                            "오늘의 좋은 생각",
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                    },
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.primary,
                         titleContentColor = MaterialTheme.colorScheme.primaryContainer
@@ -133,6 +138,8 @@ fun TodayGoodWordScreen(
             }
         }
     ) { padding ->
+        var prompt by rememberSaveable { mutableStateOf("") }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()

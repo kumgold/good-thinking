@@ -8,46 +8,53 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.goldcompany.apps.goodthinking.R
 
-val Esamanru = FontFamily(
-    Font(R.font.esamanru_bold, FontWeight.Bold),
-    Font(R.font.esamanru_medium, FontWeight.Medium),
-    Font(R.font.esamanru_light, FontWeight.Light),
+val SeoulAlrim = FontFamily(
+    Font(R.font.seoul_alrim_extra_bold, FontWeight.ExtraBold),
+    Font(R.font.seoul_alrim_bold, FontWeight.Bold),
+    Font(R.font.seoul_alrim_semi_bold, FontWeight.SemiBold),
+    Font(R.font.seoul_alrim_medium, FontWeight.Medium),
 )
 
 // Set of Material typography styles to start with
 val Typography = Typography(
     titleLarge = TextStyle(
-        fontFamily = Esamanru,
+        fontFamily = SeoulAlrim,
         fontWeight = FontWeight.Bold,
-        fontSize = 24.sp
+        fontSize = 24.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
     ),
     titleMedium = TextStyle(
-        fontFamily = Esamanru,
-        fontWeight = FontWeight.Medium,
-        fontSize = 24.sp
+        fontFamily = SeoulAlrim,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 24.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
     ),
     titleSmall = TextStyle(
-        fontFamily = Esamanru,
-        fontWeight = FontWeight.Light,
-        fontSize = 24.sp
+        fontFamily = SeoulAlrim,
+        fontWeight = FontWeight.Medium,
+        fontSize = 24.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
     ),
     bodyLarge = TextStyle(
-        fontFamily = Esamanru,
+        fontFamily = SeoulAlrim,
         fontWeight = FontWeight.Bold,
         fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
     ),
     bodyMedium = TextStyle(
-        fontFamily = Esamanru,
-        fontWeight = FontWeight.Medium,
+        fontFamily = SeoulAlrim,
+        fontWeight = FontWeight.SemiBold,
         fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
     ),
     bodySmall = TextStyle(
-        fontFamily = Esamanru,
-        fontWeight = FontWeight.Light,
+        fontFamily = SeoulAlrim,
+        fontWeight = FontWeight.Medium,
         fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp

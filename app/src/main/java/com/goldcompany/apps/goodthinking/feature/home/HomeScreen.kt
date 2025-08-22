@@ -172,7 +172,7 @@ private fun QuoteOfTheDayCard(quote: String, author: String) {
             Column {
                 Text(
                     text = quote,
-                    style = MaterialTheme.typography.bodyMedium.copy(fontStyle = FontStyle.Italic),
+                    style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(6.dp))
