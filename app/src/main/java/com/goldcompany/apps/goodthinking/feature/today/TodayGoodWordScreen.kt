@@ -71,7 +71,7 @@ fun TodayGoodWordScreen(
                 enter = fadeIn(initialAlpha = 0.0f)
             ) {
                 TopAppBar(
-                    title = { Text("오늘의 좋은 생각") },
+                    title = { Text("오늘의 좋은 생각", style = MaterialTheme.typography.titleMedium) },
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.primary,
                         titleContentColor = MaterialTheme.colorScheme.primaryContainer

@@ -106,7 +106,7 @@ fun CardScreen(
                 back = {
                     Text(
                         text = goodThinking,
-                        style = MaterialTheme.typography.titleMedium,
+                        style = MaterialTheme.typography.bodyMedium,
                         textAlign = TextAlign.Center
                     )
                 }

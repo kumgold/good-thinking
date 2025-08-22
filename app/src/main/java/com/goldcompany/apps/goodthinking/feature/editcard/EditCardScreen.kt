@@ -1,9 +1,6 @@
 package com.goldcompany.apps.goodthinking.feature.editcard
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
@@ -41,7 +37,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -129,7 +124,8 @@ fun EditCardScreen(
                     Text(
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center,
-                        text = stringResource(R.string.empty_edit_card)
+                        text = stringResource(R.string.empty_edit_card),
+                        style = MaterialTheme.typography.titleMedium
                     )
                 }
             }
@@ -182,12 +178,12 @@ fun EditCardScreen(
                             },
                             enabled = word.isNotEmpty()
                         ) {
-                            Text(stringResource(R.string.confirm))
+                            Text(stringResource(R.string.confirm), style = MaterialTheme.typography.bodySmall)
                         }
                         TextButton(
                             onClick = { isOpenedDialog.value = !isOpenedDialog.value }
                         ) {
-                            Text(stringResource(R.string.cancel))
+                            Text(stringResource(R.string.cancel), style = MaterialTheme.typography.bodySmall)
                         }
                     }
                 }
@@ -246,7 +242,8 @@ private fun GoodThinkingItem(
     ) {
         Text(
             modifier = Modifier.padding(10.dp),
-            text = word.trim()
+            text = word.trim(),
+            style = MaterialTheme.typography.bodyMedium
         )
     }
 }
@@ -284,7 +281,7 @@ private fun EditableGoodThinkingItem(
                     isClicked.value = !isClicked.value
                 }
             ) {
-                Text(stringResource(R.string.delete))
+                Text(stringResource(R.string.delete), style = MaterialTheme.typography.bodySmall)
             }
             Spacer(
                 modifier = Modifier.weight(1f)
@@ -295,12 +292,12 @@ private fun EditableGoodThinkingItem(
                     isClicked.value = !isClicked.value
                 }
             ) {
-                Text(stringResource(R.string.confirm))
+                Text(stringResource(R.string.confirm), style = MaterialTheme.typography.bodySmall)
             }
             TextButton(
                 onClick = { isClicked.value = !isClicked.value }
             ) {
-                Text(stringResource(R.string.cancel))
+                Text(stringResource(R.string.cancel), style = MaterialTheme.typography.bodySmall)
             }
         }
     }

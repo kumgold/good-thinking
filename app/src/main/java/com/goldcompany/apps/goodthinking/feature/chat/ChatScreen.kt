@@ -1,5 +1,6 @@
 package com.goldcompany.apps.goodthinking.feature.chat
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -147,6 +148,7 @@ fun ChatList(
     }
 }
 
+@SuppressLint("UnusedBoxWithConstraintsScope")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ChatBubbleItem(
@@ -227,7 +229,8 @@ fun ChatBubbleItem(
                 ) {
                     Text(
                         text = chatMessage.text,
-                        modifier = Modifier.padding(16.dp)
+                        modifier = Modifier.padding(16.dp),
+                        style = MaterialTheme.typography.bodySmall
                     )
                 }
             }
@@ -249,7 +252,8 @@ private fun DeleteButton(
             modifier = Modifier.padding(16.dp),
             text = "삭제",
             color = Color.White,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.bodySmall
         )
     }
 }

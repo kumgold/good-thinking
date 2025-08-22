@@ -39,7 +39,7 @@ fun HomeScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("좋은 생각", fontWeight = FontWeight.Bold) },
+                title = { Text("좋은 생각", style = MaterialTheme.typography.titleMedium) },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = MaterialTheme.colorScheme.primaryContainer
@@ -57,7 +57,7 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(24.dp))
             Text(
                 text = "오늘도 좋은 하루 보내세요!",
-                style = MaterialTheme.typography.headlineMedium,
+                style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onBackground,
                 fontWeight = FontWeight.Bold
             )
@@ -139,7 +139,7 @@ private fun FeatureCard(
             Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = feature.title,
-                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium),
+                style = MaterialTheme.typography.bodyLarge,
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -172,7 +172,7 @@ private fun QuoteOfTheDayCard(quote: String, author: String) {
             Column {
                 Text(
                     text = quote,
-                    style = MaterialTheme.typography.bodyLarge.copy(fontStyle = FontStyle.Italic),
+                    style = MaterialTheme.typography.bodyMedium.copy(fontStyle = FontStyle.Italic),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(6.dp))
