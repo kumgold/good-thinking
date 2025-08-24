@@ -4,11 +4,13 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,6 +19,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Send
@@ -89,40 +92,50 @@ fun ChatScreen(
                     }
                 }
             )
-        },
-        bottomBar = {
-            if (isEditMode.value) {
-                DeleteButton {
-                    chatViewModel.deleteMessages()
-                    isEditMode.value = false
-                }
-            } else {
-                MessageInput(
-                    onSendMessage = { inputText ->
-                        chatViewModel.sendMessage(inputText)
-                    },
-                    resetScroll = {
-                        coroutineScope.launch {
-                            listState.scrollToItem(0)
-                        }
+        }
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+        ) {
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxSize(),
+                contentAlignment = Alignment.Center,
+            ) {
+                ChatList(
+                    chatMessages = chatUiState.messages,
+                    listState = listState,
+                    isEditMode = isEditMode,
+                    selectMessage = { id ->
+                        chatViewModel.selectMessage(id)
                     }
                 )
             }
-        }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize()
-        ) {
-            ChatList(
-                chatMessages = chatUiState.messages,
-                listState = listState,
-                isEditMode = isEditMode,
-                selectMessage = { id ->
-                    chatViewModel.selectMessage(id)
+
+            Box(
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                if (isEditMode.value) {
+                    DeleteButton {
+                        chatViewModel.deleteMessages()
+                        isEditMode.value = false
+                    }
+                } else {
+                    MessageInput(
+                        onSendMessage = { inputText ->
+                            chatViewModel.sendMessage(inputText)
+                        },
+                        resetScroll = {
+                            coroutineScope.launch {
+                                listState.scrollToItem(0)
+                            }
+                        }
+                    )
                 }
-            )
+            }
         }
     }
 }

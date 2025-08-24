@@ -3,9 +3,11 @@ package com.goldcompany.apps.goodthinking.feature.today
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -33,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
@@ -42,6 +45,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.goldcompany.apps.goodthinking.R
 import com.goldcompany.apps.goodthinking.UiState
+import com.google.ai.client.generativeai.type.content
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -110,67 +114,52 @@ fun TodayGoodWordScreen(
                 )
             }
         },
-        bottomBar = {
-            var prompt by rememberSaveable { mutableStateOf("") }
-
-            AnimatedVisibility(
-                visible = isVisible,
-                enter = fadeIn(initialAlpha = 0.0f)
-            ) {
-                OutlinedTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(12.dp),
-                    value = prompt,
-                    onValueChange = { prompt = it },
-                    label = { Text(stringResource(R.string.label_prompt)) },
-                    leadingIcon = {
-                        Icon(Icons.Default.AddCircle, contentDescription = null)
-                    },
-                    shape = MaterialTheme.shapes.medium,
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                    keyboardActions = KeyboardActions(
-                        onSearch = {
-                            viewModel.sendPrompt(prompt.trim())
-                        }
-                    )
-                )
-            }
-        }
     ) { padding ->
-        var prompt by rememberSaveable { mutableStateOf("") }
-
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(scrollState)
-                .padding(padding),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(padding)
         ) {
-            when (uiState) {
-                is UiState.Loading -> {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        CircularProgressIndicator()
-                        Text(
-                            text = "잠시만 기다려 주세요...",
-                            style = MaterialTheme.typography.bodyMedium,
-                            modifier = Modifier.padding(top = 12.dp)
-                        )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(scrollState),
+                contentAlignment = Alignment.Center,
+            ) {
+                when (uiState) {
+                    is UiState.Loading -> {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            CircularProgressIndicator()
+                            Text(
+                                text = "잠시만 기다려 주세요...",
+                                style = MaterialTheme.typography.bodyMedium,
+                                modifier = Modifier.padding(top = 12.dp)
+                            )
+                        }
                     }
-                }
 
-                is UiState.Error -> {
-                    result = (uiState as UiState.Error).errorMessage
-                    ResultCard(text = result, color = MaterialTheme.colorScheme.error)
-                }
+                    is UiState.Error -> {
+                        result = (uiState as UiState.Error).errorMessage
+                        ResultCard(text = result, color = MaterialTheme.colorScheme.error)
+                    }
 
-                is UiState.Success -> {
-                    result = (uiState as UiState.Success).outputText
-                    ResultCard(text = result, color = MaterialTheme.colorScheme.primary)
-                }
+                    is UiState.Success -> {
+                        result = (uiState as UiState.Success).outputText
+                        ResultCard(text = result, color = MaterialTheme.colorScheme.primary)
+                    }
 
-                else -> {}
+                    else -> {}
+                }
+            }
+
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+            ) {
+                UserInput(
+                    isVisible = isVisible,
+                    onSearch = { viewModel.sendPrompt(it) }
+                )
             }
         }
     }
@@ -191,6 +180,38 @@ private fun ResultCard(text: String, color: Color) {
             color = color,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(24.dp)
+        )
+    }
+}
+
+@Composable
+private fun UserInput(
+    isVisible: Boolean,
+    onSearch: (String) -> Unit
+) {
+    var prompt by rememberSaveable { mutableStateOf("") }
+
+    AnimatedVisibility(
+        visible = isVisible,
+        enter = fadeIn(initialAlpha = 0.0f)
+    ) {
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            value = prompt,
+            onValueChange = { prompt = it },
+            label = { Text(stringResource(R.string.label_prompt)) },
+            leadingIcon = {
+                Icon(Icons.Default.AddCircle, contentDescription = null)
+            },
+            shape = MaterialTheme.shapes.medium,
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+            keyboardActions = KeyboardActions(
+                onSearch = {
+                    onSearch(prompt.trim())
+                }
+            )
         )
     }
 }

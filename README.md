@@ -18,13 +18,11 @@ etc : Gemini API, JUnit4 <br>
 - MVI 패턴 사용 (Compose - StateFlow)
 - 테스트 코드 작성
 
-## 🏞️ 영상
-<img src="./images/good_thinking.gif" alt="good thinking">
-
 ## 🏞️ 화면
-| Main                                               | Gemini                                             | Draw                                               | Edit                                               | Chat                                               |
-|----------------------------------------------------|----------------------------------------------------|----------------------------------------------------|----------------------------------------------------|----------------------------------------------------|
-| <img src="./images/good_thinking1.png" height=300> | <img src="./images/good_thinking2.png" height=300> | <img src="./images/good_thinking4.png" height=300> | <img src="./images/good_thinking3.png" height=300> | <img src="./images/good_thinking6.png" height=300> |
+<img src="./images/good_thinking_1.gif" height=400> 
+<img src="./images/good_thinking_2.gif" height=400>
+<img src="./images/good_thinking_3.gif" height=400>
+<img src="./images/good_thinking_4.gif" height=400>
 
 ## 👀 개발 과정에서 발생한 이슈
 
