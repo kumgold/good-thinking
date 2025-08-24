@@ -19,10 +19,12 @@ etc : Gemini API, JUnit4 <br>
 - 테스트 코드 작성
 
 ## 🏞️ 화면
-<img src="./images/good_thinking_1.gif" height=400> 
-<img src="./images/good_thinking_2.gif" height=400>
-<img src="./images/good_thinking_3.gif" height=400>
-<img src="./images/good_thinking_4.gif" height=400>
+<p align="center">
+  <img src="./images/good_thinking_1.gif" width="24%">
+  <img src="./images/good_thinking_2.gif" width="24%">
+  <img src="./images/good_thinking_3.gif" width="24%">
+  <img src="./images/good_thinking_4.gif" width="24%">
+</p>
 
 ## 👀 개발 과정에서 발생한 이슈
 
